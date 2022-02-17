@@ -1,4 +1,6 @@
-﻿var flag = true;
+﻿using System.Globalization;
+
+var flag = true;
 
 while (flag)
 {
@@ -23,7 +25,20 @@ double GetIntValue(string caption)
         try
         {
             Console.Write(caption);
-            var value = Convert.ToDouble(Console.ReadLine());
+            double value = 0;
+            var input = Console.ReadLine();
+            if (input.Contains('.'))
+            {
+                value = Double.Parse(input, new CultureInfo("en-US") );    
+            }
+            else if (input.Contains(','))
+            {
+                value = Double.Parse(input, new CultureInfo("tr-TR"));
+            }
+            else
+            {
+                value = Double.Parse(input, CultureInfo.CurrentCulture);
+            }
 
             return value;
         }
