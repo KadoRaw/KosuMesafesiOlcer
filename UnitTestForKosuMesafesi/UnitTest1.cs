@@ -14,6 +14,7 @@ namespace UnitTestForKosuMesafesi
         {
             var time = new TimeSpan(0, sure, 0);
            var sonuc = Calculate.CalculateValue(adimSayisi,adimUzunlugu,time);
+           
 
             Assert.AreEqual(sonuc, expected);
           

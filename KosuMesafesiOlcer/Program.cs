@@ -12,10 +12,17 @@ while (flag)
     var sure = GetTimeSpan();
     Console.Clear();
     var sonuc = Calculate.CalculateValue(adimSayisi, adimUzunlugu, sure);
-    Console.WriteLine($"Adım Uzunluğu = {adimUzunlugu}\nGeçen Zaman = {sure.ToString()}\nBir dakikada atılan adım sayısı = {adimSayisi}\nToplam atılan adım sayısı = {adimSayisi * sure.TotalMinutes}\n\n Toplam koşu mesafesi = {sonuc} Metre");
+    DisplayResult(adimUzunlugu, sure, adimSayisi, sonuc);
+    
 
     flag = WannaGoAgain();
 }
+
+void DisplayResult(double adimUzunlugu, TimeSpan sure, double adimSayisi, double sonuc)
+{
+    Console.WriteLine($"Adım Uzunluğu = {adimUzunlugu}\nGeçen Zaman = {sure.ToString()}\nBir dakikada atılan adım sayısı = {adimSayisi}\nToplam atılan adım sayısı = {adimSayisi * sure.TotalMinutes}\n\n Toplam koşu mesafesi = {sonuc} Metre");
+}
+
 double GetIntValue(string caption)
 {
     var flag = true;
@@ -39,12 +46,17 @@ double GetIntValue(string caption)
             {
                 value = Double.Parse(input, CultureInfo.CurrentCulture);
             }
-
+            var result =Validation(value,0,'<');
+            if (result)
+            {
+                Console.WriteLine("Girmiş olduğunuz değer 0'dan küçük olamaz.");
+                continue;
+            }
             return value;
         }
         catch (Exception)
         {
-            Console.WriteLine("Girmiş olduğunuz değer bir tam sayı değildir.");
+            Console.WriteLine("Girmiş olduğunuz değer geçersizdir tekrar deneyiniz.");
             continue;
         }
     }
@@ -62,20 +74,50 @@ TimeSpan GetTimeSpan()
             Console.WriteLine("");
             Console.Write("Saat: ");
             var kosuSuresiSaat = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Dakika: ");
-            var kosuSuresiDakika = Convert.ToInt32(Console.ReadLine());
+            var dakikaFlag = true;
+            var kosuSuresiDakika = 0;
+            while (dakikaFlag)
+            {
+                Console.Write("Dakika: ");
+                kosuSuresiDakika = Convert.ToInt32(Console.ReadLine());
+                var validGreaterThan = Validation(kosuSuresiDakika, 60, '>');
+                var validLessThan = Validation(kosuSuresiDakika, 0, '<');
+                if (validGreaterThan || validLessThan)
+                {
+                    Console.WriteLine("Girmiş olduğunuz değer 60 ile 0 arasında olmalıdır.");
+                    continue;
+                }
+                dakikaFlag = false;
+            }
+            
 
             var saat = new TimeSpan(kosuSuresiSaat, kosuSuresiDakika, 0);
             return saat;
         }
         catch (Exception)
         {
-            Console.WriteLine("Girmiş olduğunuz değer bir tam sayı değildir.");
+            Console.WriteLine("Girmiş olduğunuz değer geçersizdir tekrar deneyiniz.");
             continue;
         }
     }
     return default;
 }
+
+bool Validation(double deger,int deger2, char op)
+{
+    if (op == '<')
+    {
+        var result = deger < deger2;
+        return result;
+    }
+    if (op == '>')
+    {
+        var result = deger > deger2;
+        return result;
+    }
+    return false;
+}
+
 bool WannaGoAgain()
 {
     while (true)
